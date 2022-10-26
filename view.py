@@ -2,17 +2,9 @@ import sqlite3
 
 con = sqlite3.connect('DataBase.db')
 
-'''lista=['teste','teste@teste.com','3136245302','29/12/1991','MG','Urgente']'''
+'''lista=['teste','teste@teste.com','3136245302','29/12/1991','MG','Urgente'] teste '''
 
-#incerir Dados
-def inserir_Dados(i):
-    with con:
-        cursor = con.cursor()
-        query = "INSERT INTO FORMULARIO (nome,email,telefone,dia_em,estado,assunto) values(?, ?, ?, ?, ?, ?) "
-        cursor.execute(query,i)
 
-# testando com a lista acima;
-#inserir_Dados(lista)
 
 #acessar informações
 def mostrar_info():
@@ -27,19 +19,26 @@ def mostrar_info():
             lista.append(i)
         return lista
 
-'''
+#inserir Dados
+def inserir_info(i):
+    with con:
+        cursor = con.cursor()
+        query = "INSERT INTO FORMULARIO (nome,email,telefone,dia_em,estado,assunto) values(?, ?, ?, ?, ?, ?) "
+        cursor.execute(query,i)
+
+# testando com a lista acima;
+#inserir_Dados(lista)teste
+
 #atualizar Informações
-lista= ['teste',1]
-with con:
-    cursor = con.cursor()
-    query = " update formulario set nome = ? where id = ? "
-    cursor.execute(query,lista)
+def atualizar_info(i):
+    with con:
+        cursor = con.cursor()
+        query = "update formulario set nome = ?,email =?,telefone = ?, dia_em = ?, estado = ?, assunto = ? where id = ? "
+        cursor.execute(query,i)
 
 #Deletar Informações
-lista= [1]
-with con:
-    cursor = con.cursor()
-    query = " delete from formulario where id = ? "
-    cursor.execute(query,lista)
-
-'''
+def deletar_info(i):
+    with con:
+        cursor = con.cursor()
+        query = " delete from formulario where id = ? "
+        cursor.execute(query,i)

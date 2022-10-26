@@ -42,7 +42,9 @@ frameDireita.grid(row=0,column=1,rowspan=2,padx=1,pady=0,sticky=NSEW)
 app_nome= Label (frameCima,text='Formulário de Consultória',bg=co2,relief='flat',anchor=NW,font="ivy 13 bold",fg=co1)
 app_nome.place(x=10,y=20)
 
-#função para inserir dados
+# Colocando a vairavel tree como Global
+global tree
+#função para inserir dados;
 def inserir():
     nome = E_nome.get()
     email = E_email.get()
@@ -56,7 +58,7 @@ def inserir():
     if nome == '':
         messagebox.showerror('Erro','Nome não pode ser null ou vazio')
     else:
-        inserir_Dados(lista)
+        inserir_info(lista)
         messagebox.showinfo('OK','Dados cadastrados com Sucesso !!!')
 
         E_nome.delete(0,'end')
@@ -73,7 +75,82 @@ def inserir():
 
 
 
+#Função para atualizar;
+def atualizar():
+    try:
+        treev_dados = tree.focus()
+        treev_dicionario = tree.item(treev_dados)
+        tree_lista = treev_dicionario['values']
 
+        valor_id  = tree_lista[0]
+        
+        E_nome.delete(0,'end')
+        E_email.delete(0,'end')
+        E_telefone.delete(0,'end')
+        E_dataConsulta.delete(0,'end')
+        E_estadoConsulta.delete(0,'end')
+        E_assunto.delete(0,'end')
+
+        E_nome.insert(0,tree_lista[1])
+        E_email.insert(0,tree_lista[2])
+        E_telefone.insert(0,tree_lista[3])
+        E_dataConsulta.insert(0,tree_lista[4])
+        E_estadoConsulta.insert(0,tree_lista[5])
+        E_assunto.insert(0,tree_lista[6])
+        
+        def update():
+            nome = E_nome.get()
+            email = E_email.get()
+            telefone = E_telefone.get()
+            data = E_dataConsulta.get()
+            estado = E_estadoConsulta.get()
+            assunto = E_assunto.get()
+
+            lista = [nome,email,telefone,data,estado,assunto,valor_id]
+            
+            if nome == '':
+                messagebox.showerror('Erro','Nenhum Dado não pode ser null ou vazio.')
+            else:
+                    atualizar_info(lista)
+                    messagebox.showinfo('Sucesso','Dados Atualizados com Sucesso !!!')
+
+                    E_nome.delete(0,'end')
+                    E_email.delete(0,'end')
+                    E_telefone.delete(0,'end')
+                    E_dataConsulta.delete(0,'end')
+                    E_estadoConsulta.delete(0,'end')
+                    E_assunto.delete(0,'end')
+
+            for widget in frameDireita.winfo_children():
+                widget.destroy()
+            
+            mostrar()
+
+        #Botão Atualizar
+        B_buttonConfirmar = Button (frameBaixo,text='Confirmar', width = 10,bg=co2,fg=co1,relief='raised',font="ivy 7 bold",overrelief='ridge',command=update)
+        B_buttonConfirmar.place(x=110,y=370)
+    except IndexError:
+        messagebox.showerror('Erro','Selecione um dos dados na tabela')
+        
+    
+def deletar():
+    try:
+        treev_dados = tree.focus()
+        treev_dicionario = tree.item(treev_dados)
+        tree_lista = treev_dicionario['values']
+
+        valor_id  = [tree_lista[0]]
+
+        deletar_info(valor_id)
+        messagebox.showinfo('Sucesso','Dados da tabela, apagado com sucesso !!!!')
+        
+        for widget in frameDireita.winfo_children():
+                widget.destroy()
+            
+        mostrar()
+
+    except IndexError:
+        messagebox.showerror('Erro','Selecione um dos dados na tabela')
 
 # Label Baixo 
 #Nome
@@ -117,15 +194,16 @@ B_buttonInserir = Button (frameBaixo,text='Inserir', width = 9,bg=co6,fg=co1,rel
 B_buttonInserir.place(x=15,y=340)
 
 #Botão Atualizar
-B_buttonAtualizar = Button (frameBaixo,text='Atualizar', width = 9,bg=co2,fg=co1,relief='raised',anchor=NW,font="ivy 9 bold",overrelief='ridge')
+B_buttonAtualizar = Button (frameBaixo,text='Atualizar', width = 9,bg=co2,fg=co1,relief='raised',anchor=NW,font="ivy 9 bold",overrelief='ridge',command=atualizar)
 B_buttonAtualizar.place(x=110,y=340)
 
 #Botão Deletar
-B_buttonDeletar = Button (frameBaixo,text='Deletar', width = 9,bg=co7,fg=co1,relief='raised',anchor=NW,font="ivy 9 bold",overrelief='ridge')
+B_buttonDeletar = Button (frameBaixo,text='Deletar',command=deletar, width = 9,bg=co7,fg=co1,relief='raised',anchor=NW,font="ivy 9 bold",overrelief='ridge')
 B_buttonDeletar.place(x=210,y=340)
 
 
-def mostrar(): 
+def mostrar():
+    global tree
     lista = mostrar_info()
 
     # lista para cabecario
